@@ -18,17 +18,18 @@ const LoginPage = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
 
+  // Authentication check on client side
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const isLoggedIn = await wixClient.auth.loggedIn();
         if (isLoggedIn) {
-          router.push("/");
+          router.push("/"); // Redirect to homepage if already logged in
         }
       } catch (error) {
         console.error('Auth check failed:', error);
       } finally {
-        setIsLoading(false);
+        setIsLoading(false); // Finish loading after auth check
       }
     };
     checkAuth();
@@ -109,9 +110,9 @@ const LoginPage = () => {
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'lax'
         });
-        
+
         wixClient.auth.setTokens(tokens);
-        router.push("/");
+        router.push("/"); // Redirect to homepage after successful login
       } else if (response?.loginState === LoginState.FAILURE) {
         if (
           response.errorCode === "invalidEmail" ||
