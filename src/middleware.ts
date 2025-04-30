@@ -39,5 +39,10 @@ export const middleware = async (request: NextRequest) => {
 };
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
-}
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  unstable_allowDynamic: [
+    "node_modules/@wix/**",
+    "node_modules/lodash/**",
+    "node_modules/jsonpath-plus/**"
+  ],
+};

@@ -8,11 +8,20 @@ import { Suspense } from "react";
 const ListPage = async ({ searchParams }: { searchParams: any }) => {
   const wixClient = await wixClientServer();
 
-  const cat = await wixClient.collections.getCollectionBySlug(
-    searchParams.cat || "all-products"
-  );
+  let cat;
+  try {
+    cat = await wixClient.collections.getCollectionBySlug(
+      searchParams.cat || "all-products"
+    );
+  } catch (error) {
+    // Fallback to default category if slug not found
+    cat = await wixClient.collections.getCollectionBySlug("all-products");
+  }
 
   const categoryId = cat?.collection?._id;
+
+  // Fetch all categories for filter dropdown
+  const categories = await wixClient.collections.queryCollections().find();
 
   return (
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative">
@@ -32,12 +41,12 @@ const ListPage = async ({ searchParams }: { searchParams: any }) => {
         </div>
       </div>
       {/* FILTER */}
-      <Filter />
+      <Filter categories={categories.items} />
       {/* PRODUCTS */}
       <h1 className="mt-12 text-xl font-semibold">{cat?.collection?.name || "Products"} For You!</h1>
       <Suspense fallback={<Skeleton />}>
         <ProductList
-          categoryId={categoryId || "00000000-000000-000000-000000000001"}
+          categoryId={categoryId || "00000000-000000-000000000001"}
           searchParams={searchParams}
         />
       </Suspense>

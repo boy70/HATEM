@@ -2,7 +2,15 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-const Filter = () => {
+type Category = {
+  _id: string | null | undefined;
+  name: string;
+};
+
+type FilterProps = {
+  categories: Category[];
+};
+const Filter = ({ categories }: FilterProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { replace } = useRouter();
@@ -43,16 +51,20 @@ const Filter = () => {
           className="text-xs rounded-2xl pl-2 w-24 ring-1 ring-gray-400"
           onChange={handleFilterChange}
         />
-        {/* TODO: Filter Categories */}
+        {/* Filter Categories */}
         <select
           name="cat"
           className="py-2 px-4 rounded-2xl text-xs font-medium bg-[#EBEDED]"
           onChange={handleFilterChange}
         >
-          <option>Category</option>
-          <option value="">New Arrival</option>
-          <option value="">Popular</option>
+          <option value="">All Categories</option>
+          {categories.map((category) => (
+            <option key={category._id} value={category.name}>
+              {category.name}
+            </option>
+          ))}
         </select>
+
         <select
           name=""
           id=""

@@ -1,4 +1,4 @@
-import { wixClientServer } from "@/lib/wixClientServer";
+import { wixClientServer } from "../lib/wixClientServer";
 import { products } from "@wix/stores";
 import Image from "next/image";
 import Link from "next/link";
@@ -49,7 +49,13 @@ const ProductList = async ({
     }
   }
 
-  const res = await productQuery.find();
+  let res;
+  try {
+    res = await productQuery.find();
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res = { items: [], currentPage: 0, hasPrev: () => false, hasNext: () => false };
+  }
 
   return (
     <div className="mt-12 flex gap-x-8 gap-y-16 justify-between flex-wrap">
