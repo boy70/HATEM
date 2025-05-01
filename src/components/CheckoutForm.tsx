@@ -24,7 +24,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ cartItems, onClose }) => {
   const [successMessage, setSuccessMessage] = useState("");
 
   const productOrdered = cartItems.map(item => item.productName).join(", ");
-  const quantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+  const quantity = cartItems.map(item => item.quantity).join(", ");
   const price = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -48,6 +48,11 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ cartItems, onClose }) => {
       return;
     }
 
+    // Validate phone number and postal code formats if necessary
+    // Example: if (phoneNumber.length < 10) { ... }
+
+
+    //sskjfnskdjnfksjdfnskdf 
     try {
       const { error } = await supabase.from("orders").insert([
         {
